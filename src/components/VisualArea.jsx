@@ -54,7 +54,7 @@ const VisualArea = forwardRef(({ mode, language = 'en' }, ref) => {
                     className="fill-none stroke-[#333] stroke-2 transition-[stroke] duration-300 stroke-linecap-round stroke-linejoin-round"
                 />
 
-                <g style={{ transformOrigin: '50% 50%', transform: 'scale(1)' }}>
+                <g style={{ transformOrigin: '50% 50%', transform: 'scale(0.9)' }}>
                     <use href="#complexLungShape" className="fill-[#111] stroke-[#333] stroke-[0.5]" />
 
                     <g mask="url(#lungMask)">
