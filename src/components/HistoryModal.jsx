@@ -38,14 +38,18 @@ export default function HistoryModal({ isOpen, onClose, history, language }) {
                         ) : (
                             <>
                                 {/* Summary Stats */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="bg-[#222] p-4 rounded-lg text-center">
-                                        <div className="text-gray-400 text-xs mb-1">{t.history.totalSessions}</div>
-                                        <div className="text-2xl font-bold text-white">{history.totalSessions || 0}</div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <div className="bg-[#222] p-2 rounded-lg text-center">
+                                        <div className="text-gray-400 text-[10px] mb-1">{t.history.todayTotal} ({t.panel.minutes})</div>
+                                        <div className="text-xl font-bold text-primary-gold">{Math.floor((history.todayTimeSeconds || 0) / 60)}</div>
                                     </div>
-                                    <div className="bg-[#222] p-4 rounded-lg text-center">
-                                        <div className="text-gray-400 text-xs mb-1">{t.history.totalTime} ({t.panel.minutes})</div>
-                                        <div className="text-2xl font-bold text-primary-gold">{Math.floor((history.totalTimeSeconds || 0) / 60)}</div>
+                                    <div className="bg-[#222] p-2 rounded-lg text-center">
+                                        <div className="text-gray-400 text-[10px] mb-1">{t.history.totalSessions}</div>
+                                        <div className="text-xl font-bold text-white">{history.totalSessions || 0}</div>
+                                    </div>
+                                    <div className="bg-[#222] p-2 rounded-lg text-center">
+                                        <div className="text-gray-400 text-[10px] mb-1">{t.history.totalTime} ({t.panel.minutes})</div>
+                                        <div className="text-xl font-bold text-primary-gold">{Math.floor((history.totalTimeSeconds || 0) / 60)}</div>
                                     </div>
                                 </div>
 

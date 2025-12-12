@@ -301,8 +301,13 @@ export function useBreathingEngine({
         isRunning,
         start,
         stop,
+        stop,
         infoText,
-        remainingSeconds
+        remainingSeconds,
+        getElapsedSeconds: () => {
+             if (!stateRef.current.sessionStartTime) return 0;
+             return (performance.now() - stateRef.current.sessionStartTime) / 1000;
+        }
     };
 }
 

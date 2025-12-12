@@ -33,8 +33,15 @@ export default function BreathingApp({ userId, language, setLanguage }) {
             totalTimeSeconds: 0,
             lastSession: null,
             byMode: {},
+            totalSessions: 0,
+            totalTimeSeconds: 0,
+            todayTimeSeconds: 0,
+            lastSession: null,
+            byMode: {},
             records: records
         };
+
+        const todayStr = new Date().toDateString();
 
         records.forEach(r => {
             // Priority: actualSeconds from remote > calculated from duration > 0
@@ -49,6 +56,10 @@ export default function BreathingApp({ userId, language, setLanguage }) {
             // Update Stats
             stats.totalSessions += 1;
             stats.totalTimeSeconds += durationSec;
+
+            if (new Date(r.timestamp).toDateString() === todayStr) {
+                stats.todayTimeSeconds += durationSec;
+            }
 
             // Last session logic
             stats.lastSession = {
@@ -100,6 +111,14 @@ export default function BreathingApp({ userId, language, setLanguage }) {
         language // Pass language to engine
     });
 
+    const handleManualStop = () => {
+        const elapsed = engine.getElapsedSeconds();
+        if (elapsed > 20) {
+            handleComplete(elapsed);
+        }
+        engine.stop(false);
+    };
+
     const handleLogout = () => {
         if (engine.isRunning) engine.stop();
         localStorage.removeItem('exbreath_user_id');
@@ -136,7 +155,7 @@ export default function BreathingApp({ userId, language, setLanguage }) {
             <div className="h-[45dvh] md:h-full md:w-[400px] shrink-0 bg-panel-bg flex flex-col border-t border-[#333] overflow-hidden">
                 <ControlPanel
                     onStart={engine.start}
-                    onStop={() => engine.stop(false)}
+                    onStop={handleManualStop}
                     isRunning={engine.isRunning}
                     mode={mode}
                     setMode={setMode}

@@ -179,7 +179,10 @@ export default function ControlPanel({
             </div>
 
             {/* Fixed Footer for Actions */}
-            <div className="shrink-0 p-4 border-t border-[#222] bg-panel-bg z-50 w-full pb-8 md:pb-4 shadow-[0_-5px_15px_rgba(0,0,0,0.5)]">
+            <div
+                className="shrink-0 p-4 border-t border-[#222] bg-panel-bg z-50 w-full shadow-[0_-5px_15px_rgba(0,0,0,0.5)]"
+                style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 10px))' }}
+            >
                 {!isRunning ? (
                     <button
                         onClick={onStart}
