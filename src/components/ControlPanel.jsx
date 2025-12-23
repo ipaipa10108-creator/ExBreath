@@ -10,10 +10,10 @@ export default function ControlPanel({
     setMode,
     duration,
     setDuration,
-    toggleSound,
-    isSoundOn,
-    toggleVoice,
-    isVoiceOn,
+    soundLevel,
+    setSoundLevel,
+    voiceLevel,
+    setVoiceLevel,
     customSettings,
     setCustomSettings,
     onOpenHistory,
@@ -58,6 +58,28 @@ export default function ControlPanel({
         if (language === 'zh') return '中';
         return 'JP';
     }
+
+    const cycleSound = () => setSoundLevel((soundLevel + 1) % 4);
+    const cycleVoice = () => setVoiceLevel((voiceLevel + 1) % 4);
+
+    const getVolumeIcon = () => {
+        if (soundLevel === 0) return <VolumeX size={14} />;
+        if (soundLevel === 1) return <Volume size={14} />;
+        if (soundLevel === 2) return <Volume1 size={14} />;
+        return <Volume2 size={14} />;
+    };
+
+    const getVoiceIcon = () => {
+        if (voiceLevel === 0) return <MicOff size={14} />;
+        return <Mic size={14} />;
+    };
+
+    const getLevelColor = (lvl) => {
+        if (lvl === 0) return 'text-gray-600';
+        if (lvl === 1) return 'text-primary-gold opacity-50';
+        if (lvl === 2) return 'text-primary-gold opacity-80';
+        return 'text-primary-gold drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]';
+    };
 
     return (
         <div className="flex flex-col h-full bg-panel-bg relative">
@@ -141,17 +163,17 @@ export default function ControlPanel({
                         <label className="text-xs text-gray-500 font-mono tracking-wider">{t.panel.breathing}</label>
                         <div className="flex justify-center gap-4 bg-black/20 p-3 rounded-lg">
                             <button
-                                onClick={toggleVoice}
-                                className={`flex items-center gap-1.5 text-xs transition-colors ${isVoiceOn ? 'text-primary-gold drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]' : 'text-gray-600'}`}
+                                onClick={cycleVoice}
+                                className={`flex items-center gap-1.5 text-xs transition-colors ${getLevelColor(voiceLevel)}`}
                             >
-                                {isVoiceOn ? <Mic size={14} /> : <MicOff size={14} />}
+                                {getVoiceIcon()}
                                 {t.panel.voice}
                             </button>
                             <button
-                                onClick={toggleSound}
-                                className={`flex items-center gap-1.5 text-xs transition-colors ${isSoundOn ? 'text-primary-gold drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]' : 'text-gray-600'}`}
+                                onClick={cycleSound}
+                                className={`flex items-center gap-1.5 text-xs transition-colors ${getLevelColor(soundLevel)}`}
                             >
-                                {isSoundOn ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                                {getVolumeIcon()}
                                 {t.panel.sound}
                             </button>
                             <div className="w-px bg-[#333] mx-1"></div>
@@ -181,7 +203,7 @@ export default function ControlPanel({
             {/* Fixed Footer for Actions */}
             <div
                 className="shrink-0 p-4 border-t border-[#222] bg-panel-bg z-50 w-full shadow-[0_-5px_15px_rgba(0,0,0,0.5)]"
-                style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 10px))' }}
+                style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 20px))' }}
             >
                 {!isRunning ? (
                     <button

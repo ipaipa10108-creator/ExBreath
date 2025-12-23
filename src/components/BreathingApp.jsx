@@ -9,10 +9,11 @@ import { LogOut } from 'lucide-react';
 export default function BreathingApp({ userId, language, setLanguage }) {
     const [mode, setMode] = useState('box');
     const [duration, setDuration] = useState(5); // minutes
-    const [isSoundOn, setIsSoundOn] = useState(true);
-    const [isVoiceOn, setIsVoiceOn] = useState(true);
+    const [soundLevel, setSoundLevel] = useState(3); // 0: mute, 1: low, 2: med, 3: high
+    const [voiceLevel, setVoiceLevel] = useState(3);
     const [customSettings, setCustomSettings] = useState([4, 4, 4, 4]);
     const [visualsReady, setVisualsReady] = useState(false);
+    const [showPublicHistory, setShowPublicHistory] = useState(false);
 
     // Language State managed in parent App.jsx
 
@@ -103,8 +104,8 @@ export default function BreathingApp({ userId, language, setLanguage }) {
         mode,
         customSettings,
         totalDurationMinutes: duration,
-        isVoiceOn,
-        isSoundOn,
+        voiceLevel,
+        soundLevel,
         visualRefs: visualRef,
         onComplete: handleComplete,
         visualsReady,
@@ -126,7 +127,7 @@ export default function BreathingApp({ userId, language, setLanguage }) {
     };
 
     return (
-        <div className="flex flex-col md:flex-row h-full w-full bg-black">
+        <div className="flex flex-col md:flex-row h-[100dvh] w-full bg-black overflow-hidden relative">
             {/* Visual Area (Left/Top) */}
             <div className="flex-1 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,#1a1a1a_0%,#000_90%)] overflow-hidden border-b md:border-b-0 md:border-r border-[#333]">
                 <VisualArea mode={mode} ref={visualRef} language={language} />
@@ -161,10 +162,10 @@ export default function BreathingApp({ userId, language, setLanguage }) {
                     setMode={setMode}
                     duration={duration}
                     setDuration={setDuration}
-                    toggleSound={() => setIsSoundOn(!isSoundOn)}
-                    isSoundOn={isSoundOn}
-                    toggleVoice={() => setIsVoiceOn(!isVoiceOn)}
-                    isVoiceOn={isVoiceOn}
+                    soundLevel={soundLevel}
+                    setSoundLevel={setSoundLevel}
+                    voiceLevel={voiceLevel}
+                    setVoiceLevel={setVoiceLevel}
                     customSettings={customSettings}
                     setCustomSettings={setCustomSettings}
                     onOpenHistory={handleOpenHistory}
@@ -179,6 +180,7 @@ export default function BreathingApp({ userId, language, setLanguage }) {
                 onClose={() => setShowHistory(false)}
                 history={historyData}
                 language={language}
+                userId={userId}
             />
         </div>
     );

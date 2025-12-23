@@ -87,3 +87,19 @@ export const uploadRecord = async (data) => {
         console.error("Upload failed", err);
     }
 };
+
+export const fetchGlobalHistory = async () => {
+    if (!GAS_URL) return [];
+    try {
+        const response = await fetch(`${GAS_URL}?type=global`, {
+            method: 'GET',
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        // The backend should return an array of records
+        return Array.isArray(data) ? data : (data.records || []);
+    } catch (err) {
+        console.error("Fetch global history failed", err);
+        return [];
+    }
+};

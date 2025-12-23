@@ -74,6 +74,7 @@ export const TRANSLATIONS = {
             todayTotal: "Today's Total",
             lastSession: "Last Session",
             records: "Recent Records",
+            communityRecords: "Last 10 Community Records",
             close: "Close",
             loading: "Loading cloud data..."
         }
@@ -153,6 +154,7 @@ export const TRANSLATIONS = {
             todayTotal: "今日總計",
             lastSession: "上次練習",
             records: "最近紀錄",
+            communityRecords: "最近 10 筆社群紀錄",
             close: "關閉",
             loading: "正在同步雲端資料..."
         }
@@ -232,6 +234,7 @@ export const TRANSLATIONS = {
             todayTotal: "本日の合計",
             lastSession: "前回の練習",
             records: "最近の記録",
+            communityRecords: "直近10件のコミュニティ記録",
             close: "閉じる",
             loading: "クラウドデータを同期中..."
         }

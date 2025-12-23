@@ -11,7 +11,9 @@ export function useBreathingEngine({
     visualRefs,
     onComplete,
     visualsReady,
-    language = 'en'
+    language = 'en',
+    soundLevel = 3,
+    voiceLevel = 3
 }) {
     const [isRunning, setIsRunning] = useState(false);
     const [infoText, setInfoText] = useState({ title: '', desc: '' });
@@ -27,17 +29,17 @@ export function useBreathingEngine({
         totalDurationMinutes: totalDurationMinutes,
         spokenCount: new Set(),
         currentPreset: null,
-        isVoiceOn: isVoiceOn,
-        isSoundOn: isSoundOn,
+        soundLevel: soundLevel,
+        voiceLevel: voiceLevel,
         language: language
     });
 
     // Update refs when props change
     useEffect(() => {
-        stateRef.current.isVoiceOn = isVoiceOn;
-        stateRef.current.isSoundOn = isSoundOn;
+        stateRef.current.soundLevel = soundLevel;
+        stateRef.current.voiceLevel = voiceLevel;
         stateRef.current.language = language;
-    }, [isVoiceOn, isSoundOn, language]);
+    }, [soundLevel, voiceLevel, language]);
 
     // Load preset
     useEffect(() => {
@@ -236,13 +238,13 @@ export function useBreathingEngine({
                 if (!hasSpokenStart) {
                     hasSpokenStart = true;
                     // Use Ref values for realtime updates
-                    speak(actionLabel, stateRef.current.isVoiceOn, stateRef.current.language);
-                    playSound(effect, stateRef.current.isSoundOn, stateRef.current.audioCtx);
+                    speak(actionLabel, stateRef.current.voiceLevel, stateRef.current.language);
+                    playSound(effect, stateRef.current.soundLevel, stateRef.current.audioCtx);
                 }
 
                 if (remaining <= 3 && remaining >= 1 && !spokenCount.has(remaining)) {
                     spokenCount.add(remaining);
-                    speak(remaining.toString(), stateRef.current.isVoiceOn, stateRef.current.language);
+                    speak(remaining.toString(), stateRef.current.voiceLevel, stateRef.current.language);
                 }
 
                 const currentDist = baseDist + (segmentLen * progress);
@@ -305,47 +307,50 @@ export function useBreathingEngine({
         infoText,
         remainingSeconds,
         getElapsedSeconds: () => {
-             if (!stateRef.current.sessionStartTime) return 0;
-             return (performance.now() - stateRef.current.sessionStartTime) / 1000;
+            if (!stateRef.current.sessionStartTime) return 0;
+            return (performance.now() - stateRef.current.sessionStartTime) / 1000;
         }
     };
 }
 
 // Sound Helpers
-function speak(text, enabled, lang = 'en') {
-    if (!enabled) return;
+function speak(text, level, lang = 'en') {
+    if (level === 0) return;
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = VOICE_LANG_CODES[lang] || 'en-US';
     u.rate = 1.3;
+    u.volume = level === 1 ? 0.3 : (level === 2 ? 0.6 : 1.0);
     window.speechSynthesis.speak(u);
 }
 
-function playSound(effect, enabled, ctx) {
-    if (!enabled || !ctx) return;
+function playSound(effect, level, ctx) {
+    if (level === 0 || !ctx) return;
     const t = ctx.currentTime;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain);
     gain.connect(ctx.destination);
 
+    const baseVol = level === 1 ? 0.1 : (level === 2 ? 0.25 : 0.4);
+
     if (effect === 'fill' || effect === 'fill-max') {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(220, t);
         osc.frequency.exponentialRampToValueAtTime(440, t + 4);
-        gain.gain.setValueAtTime(0.1, t);
+        gain.gain.setValueAtTime(baseVol, t);
         gain.gain.exponentialRampToValueAtTime(0.01, t + 4);
     } else if (effect === 'drain') {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(440, t);
         osc.frequency.exponentialRampToValueAtTime(220, t + 4);
-        gain.gain.setValueAtTime(0.1, t);
+        gain.gain.setValueAtTime(baseVol, t);
         gain.gain.exponentialRampToValueAtTime(0.01, t + 4);
     } else {
         // Hold sounds - subtle
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(330, t);
-        gain.gain.setValueAtTime(0.05, t);
+        gain.gain.setValueAtTime(baseVol * 0.5, t);
         gain.gain.exponentialRampToValueAtTime(0.01, t + 1);
     }
 
