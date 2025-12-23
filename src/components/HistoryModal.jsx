@@ -9,6 +9,21 @@ export default function HistoryModal({ isOpen, onClose, history, language }) {
     const [communityHistory, setCommunityHistory] = useState([]);
     const [loadingCommunity, setLoadingCommunity] = useState(false);
 
+    const parseDate = (ts) => {
+        if (!ts) return '';
+        // Handle "2025/12/12下午5:20:45" format
+        if (typeof ts === 'string' && ts.includes('下午')) {
+            ts = ts.replace('下午', ' PM').replace('/', '-').replace('/', '-');
+        }
+        if (typeof ts === 'string' && ts.includes('上午')) {
+            ts = ts.replace('上午', ' AM').replace('/', '-').replace('/', '-');
+        }
+
+        const d = new Date(ts);
+        if (isNaN(d.getTime())) return String(ts); // Fallback to raw string
+        return d.toLocaleString('zh-TW', { hour12: true });
+    };
+
     useEffect(() => {
         if (isOpen && view === 'community') {
             loadCommunity();
@@ -101,12 +116,7 @@ export default function HistoryModal({ isOpen, onClose, history, language }) {
                                                 </div>
                                                 <div className="text-xs text-gray-500 flex justify-between">
                                                     <span>{history.lastSession.duration === 'Infinite' ? t.panel.infinite : `${history.lastSession.duration} ${t.panel.minutes}`}</span>
-                                                    <span>{(() => {
-                                                        const ts = history.lastSession.timestamp;
-                                                        // Ensure valid date
-                                                        const d = new Date(ts);
-                                                        return !isNaN(d.getTime()) ? d.toLocaleString('zh-TW', { hour12: true }) : ts;
-                                                    })()}</span>
+                                                    <span>{parseDate(history.lastSession.timestamp)}</span>
                                                 </div>
                                             </div>
                                         ) : (
@@ -152,18 +162,17 @@ export default function HistoryModal({ isOpen, onClose, history, language }) {
                                                 <div key={idx} className="bg-[#1a1a1a] p-3 rounded border border-[#222] flex flex-col gap-1">
                                                     <div className="flex justify-between items-center">
                                                         <span className="text-primary-gold font-mono text-xs">User: {r.id}</span>
-                                                        <span className="text-gray-600 text-[10px]">{(() => {
-                                                            const ts = r.timestamp;
-                                                            const d = new Date(ts);
-                                                            return !isNaN(d.getTime()) ? d.toLocaleString('zh-TW', { hour12: true }) : ts;
-                                                        })()}</span>
+                                                        <span className="text-gray-600 text-[10px]">{parseDate(r.timestamp)}</span>
                                                     </div>
                                                     <div className="flex justify-between items-center text-sm">
                                                         <span className="text-white">
                                                             {t.modes[r.level] ? t.modes[r.level].title : r.level}
                                                         </span>
                                                         <span className="text-gray-400">
-                                                            {r.actualSeconds ? `${Math.floor(r.actualSeconds / 60)}:${(Math.floor(r.actualSeconds) % 60).toString().padStart(2, '0')}` : r.duration}
+                                                            {r.actualSeconds
+                                                                ? `${Math.floor(Number(r.actualSeconds) / 60)}:${(Math.floor(Number(r.actualSeconds)) % 60).toString().padStart(2, '0')}`
+                                                                : (Number(r.duration) ? `${r.duration} ${t.panel.minutes}` : r.duration)
+                                                            }
                                                         </span>
                                                     </div>
                                                 </div>
