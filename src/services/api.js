@@ -59,7 +59,8 @@ export const fetchRemoteHistory = async (userId) => {
 export const uploadRecord = async (data) => {
     const payload = {
         ...data,
-        timestamp: new Date().toISOString()
+        // Generate Local ISO String (YYYY-MM-DDTHH:mm:ss.sss)
+        timestamp: new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, -1)
     };
 
     // 1. Save Local
