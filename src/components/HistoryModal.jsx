@@ -101,7 +101,12 @@ export default function HistoryModal({ isOpen, onClose, history, language }) {
                                                 </div>
                                                 <div className="text-xs text-gray-500 flex justify-between">
                                                     <span>{history.lastSession.duration === 'Infinite' ? t.panel.infinite : `${history.lastSession.duration} ${t.panel.minutes}`}</span>
-                                                    <span>{new Date(history.lastSession.timestamp).toLocaleDateString()}</span>
+                                                    <span>{(() => {
+                                                        const ts = history.lastSession.timestamp;
+                                                        // Ensure valid date
+                                                        const d = new Date(ts);
+                                                        return !isNaN(d.getTime()) ? d.toLocaleString('zh-TW', { hour12: true }) : ts;
+                                                    })()}</span>
                                                 </div>
                                             </div>
                                         ) : (
@@ -147,7 +152,11 @@ export default function HistoryModal({ isOpen, onClose, history, language }) {
                                                 <div key={idx} className="bg-[#1a1a1a] p-3 rounded border border-[#222] flex flex-col gap-1">
                                                     <div className="flex justify-between items-center">
                                                         <span className="text-primary-gold font-mono text-xs">User: {r.id}</span>
-                                                        <span className="text-gray-600 text-[10px]">{new Date(r.timestamp).toLocaleString()}</span>
+                                                        <span className="text-gray-600 text-[10px]">{(() => {
+                                                            const ts = r.timestamp;
+                                                            const d = new Date(ts);
+                                                            return !isNaN(d.getTime()) ? d.toLocaleString('zh-TW', { hour12: true }) : ts;
+                                                        })()}</span>
                                                     </div>
                                                     <div className="flex justify-between items-center text-sm">
                                                         <span className="text-white">
