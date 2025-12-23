@@ -1,4 +1,4 @@
-import { Play, Square, Volume2, VolumeX, Mic, MicOff, History, Globe } from 'lucide-react';
+import { Play, Square, Volume, Volume1, Volume2, VolumeX, Mic, MicOff, History, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TRANSLATIONS } from '../constants/translations';
 

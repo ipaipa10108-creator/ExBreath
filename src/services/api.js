@@ -91,7 +91,7 @@ export const uploadRecord = async (data) => {
 export const fetchGlobalHistory = async () => {
     if (!GAS_URL) return [];
     try {
-        const response = await fetch(`${GAS_URL}?type=global`, {
+        const response = await fetch(`${GAS_URL}?type=global&t=${Date.now()}`, {
             method: 'GET',
         });
         if (!response.ok) throw new Error('Network response was not ok');
