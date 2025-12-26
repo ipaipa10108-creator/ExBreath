@@ -22,3 +22,18 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-tap-highlight-color: transparent;
 }
+
+/* iPad 與平板裝置優化：增加基礎字體大小 */
+@media (min-width: 768px) {
+  :root {
+    font-size: 18px;
+  }
+}
+
+/* 大型顯示器優化 */
+@media (min-width: 1200px) {
+  :root {
+    font-size: 20px;
+  }
+}
+

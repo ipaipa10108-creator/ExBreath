@@ -84,26 +84,26 @@ export default function ControlPanel({
     return (
         <div className="flex flex-col h-full bg-panel-bg relative">
             {/* Scrollable Content */}
-            <div className="flex-1 min-h-0 overflow-y-auto p-4 md:p-6 space-y-4">
-                <div className="space-y-4">
-                    <div className="relative">
-                        <h1 className="text-2xl text-primary-gold font-light tracking-[4px] text-center">{t.appTitle}</h1>
+            <div className="flex-1 min-h-0 overflow-y-auto p-4 md:p-10 space-y-6">
+                <div className="space-y-6">
+                    <div className="relative mb-6">
+                        <h1 className="text-2xl md:text-4xl text-primary-gold font-light tracking-[4px] text-center">{t.appTitle}</h1>
                         <button
                             onClick={toggleLang}
-                            className="absolute right-0 top-1 text-xs text-gray-500 hover:text-primary-gold flex items-center gap-1 border border-gray-700 rounded px-1.5 py-0.5 transition-colors"
+                            className="absolute right-0 top-1 text-xs md:text-sm text-gray-500 hover:text-primary-gold flex items-center gap-1 border border-gray-700 rounded px-2 py-0.5 transition-colors"
                         >
-                            <Globe size={10} /> {getLangLabel()}
+                            <Globe size={12} /> {getLangLabel()}
                         </button>
                     </div>
 
                     {/* Mode Selector */}
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs text-gray-500 font-mono tracking-wider">{t.panel.mode}</label>
+                        <label className="text-xs md:text-base text-gray-500 font-mono tracking-wider">{t.panel.mode}</label>
                         <select
                             value={mode}
                             onChange={(e) => setMode(e.target.value)}
                             disabled={isRunning}
-                            className="w-full p-3 bg-[#222] border border-[#444] text-primary-gold rounded-md font-bold cursor-pointer focus:outline-none focus:border-primary-gold transition-colors disabled:opacity-50"
+                            className="w-full p-3 md:p-5 bg-[#222] border border-[#444] text-primary-gold rounded-md font-bold text-base md:text-xl cursor-pointer focus:outline-none focus:border-primary-gold transition-colors disabled:opacity-50"
                         >
                             {modes.map(m => (
                                 <option key={m.id} value={m.id}>{m.label}</option>
@@ -112,17 +112,17 @@ export default function ControlPanel({
                     </div>
 
                     {/* Duration Control */}
-                    <div className="flex flex-col gap-1">
-                        <label className="text-xs text-gray-500 font-mono tracking-wider">{t.panel.duration}</label>
-                        <div className="flex gap-1.5">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-xs md:text-base text-gray-500 font-mono tracking-wider">{t.panel.duration}</label>
+                        <div className="flex gap-2">
                             {durations.map(d => (
                                 <button
                                     key={d.min}
                                     onClick={() => setDuration(d.min)}
                                     disabled={isRunning}
-                                    className={`flex-1 py-3 rounded text-xs font-bold transition-all disabled:opacity-50 
+                                    className={`flex-1 py-3 md:py-5 rounded text-xs md:text-lg font-bold transition-all disabled:opacity-50 
                                         ${duration === d.min
-                                            ? 'bg-primary-gold text-black shadow-[0_0_10px_rgba(212,175,55,0.3)]'
+                                            ? 'bg-primary-gold text-black shadow-[0_0_15px_rgba(212,175,55,0.4)]'
                                             : 'bg-[#222] border border-[#444] text-gray-400 hover:bg-[#333]'
                                         }
                                     `}
@@ -159,40 +159,40 @@ export default function ControlPanel({
                     </AnimatePresence>
 
                     {/* Toggles */}
-                    <div className="flex flex-col gap-1">
-                        <label className="text-xs text-gray-500 font-mono tracking-wider">{t.panel.breathing}</label>
-                        <div className="flex justify-center gap-4 bg-black/20 p-3 rounded-lg">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-xs md:text-base text-gray-500 font-mono tracking-wider">{t.panel.breathing}</label>
+                        <div className="flex justify-center gap-6 bg-black/20 p-4 md:p-6 rounded-lg">
                             <button
                                 onClick={cycleVoice}
-                                className={`flex items-center gap-1.5 text-xs transition-colors ${getLevelColor(voiceLevel)}`}
+                                className={`flex items-center gap-1.5 text-xs md:text-lg transition-colors ${getLevelColor(voiceLevel)}`}
                             >
-                                {getVoiceIcon()}
+                                <Mic size={18} className="md:w-6 md:h-6" />
                                 {t.panel.voice}
                             </button>
                             <button
                                 onClick={cycleSound}
-                                className={`flex items-center gap-1.5 text-xs transition-colors ${getLevelColor(soundLevel)}`}
+                                className={`flex items-center gap-1.5 text-xs md:text-lg transition-colors ${getLevelColor(soundLevel)}`}
                             >
-                                {getVolumeIcon()}
+                                <Volume2 size={18} className="md:w-6 md:h-6" />
                                 {t.panel.sound}
                             </button>
                             <div className="w-px bg-[#333] mx-1"></div>
                             <button
                                 onClick={onOpenHistory}
-                                className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors"
+                                className="flex items-center gap-1.5 text-xs md:text-lg text-gray-400 hover:text-white transition-colors"
                             >
-                                <History size={14} />
+                                <History size={18} className="md:w-6 md:h-6" />
                                 {t.panel.history}
                             </button>
                         </div>
                     </div>
 
                     {/* Info Card */}
-                    <div className="p-4 bg-[#151515] border-l-2 border-primary-gold rounded-r-md text-sm text-[#ccc] leading-relaxed">
-                        <h3 className="text-primary-gold border-b border-[#333] pb-1 mb-2 font-bold">
+                    <div className="p-4 md:p-8 bg-[#151515] border-l-4 border-primary-gold rounded-r-md text-sm md:text-lg text-[#ccc] leading-relaxed">
+                        <h3 className="text-primary-gold border-b border-[#333] pb-2 mb-3 font-bold text-lg md:text-2xl">
                             {infoText ? infoText.title : t.panel.ready}
                         </h3>
-                        <p className="whitespace-pre-line text-xs text-gray-400">
+                        <p className="whitespace-pre-line text-xs md:text-base text-gray-400">
                             {infoText ? infoText.desc : t.panel.readyDesc}
                         </p>
                     </div>
@@ -202,22 +202,22 @@ export default function ControlPanel({
 
             {/* Fixed Footer for Actions */}
             <div
-                className="shrink-0 p-4 border-t border-[#222] bg-panel-bg z-50 w-full shadow-[0_-5px_15px_rgba(0,0,0,0.5)]"
+                className="shrink-0 p-4 md:p-10 border-t border-[#222] bg-panel-bg z-50 w-full shadow-[0_-5px_15px_rgba(0,0,0,0.5)]"
                 style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 20px))' }}
             >
                 {!isRunning ? (
                     <button
                         onClick={onStart}
-                        className="w-full bg-gradient-to-br from-primary-gold to-yellow-700 text-black font-bold py-4 rounded-lg hover:brightness-110 flex items-center justify-center gap-2 text-lg shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all active:scale-[0.98]"
+                        className="w-full bg-gradient-to-br from-primary-gold to-yellow-700 text-black font-bold py-5 md:py-8 rounded-lg hover:brightness-110 flex items-center justify-center gap-2 text-xl md:text-3xl shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all active:scale-[0.98]"
                     >
-                        <Play fill="black" size={20} /> <span className="tracking-widest">{t.panel.start}</span>
+                        <Play fill="black" size={24} className="md:w-10 md:h-10" /> <span className="tracking-widest">{t.panel.start}</span>
                     </button>
                 ) : (
                     <button
                         onClick={onStop}
-                        className="w-full bg-[#333] border border-[#555] text-gray-400 font-bold py-4 rounded-lg hover:bg-[#444] flex items-center justify-center gap-2 text-lg transition-all active:scale-[0.98]"
+                        className="w-full bg-[#333] border border-[#555] text-gray-400 font-bold py-5 md:py-8 rounded-lg hover:bg-[#444] flex items-center justify-center gap-2 text-xl md:text-3xl transition-all active:scale-[0.98]"
                     >
-                        <Square fill="currentColor" size={20} /> <span className="tracking-widest">{t.panel.stop}</span>
+                        <Square fill="currentColor" size={24} className="md:w-10 md:h-10" /> <span className="tracking-widest">{t.panel.stop}</span>
                     </button>
                 )}
             </div>

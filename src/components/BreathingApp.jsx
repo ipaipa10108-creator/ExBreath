@@ -136,10 +136,10 @@ export default function BreathingApp({ userId, language, setLanguage }) {
                     User: <span className="text-primary-gold">{userId}</span>
                 </div>
                 <button onClick={handleLogout} className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors z-20">
-                    <LogOut size={16} />
+                    <LogOut className="w-5 h-5 md:w-8 md:h-8" />
                 </button>
 
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-gray-500 font-mono text-sm pointer-events-none select-none">
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-gray-500 font-mono text-sm md:text-xl pointer-events-none select-none">
                     {duration === 0 ? (language === 'en' ? "Mode: Infinite" : (language === 'zh' ? "模式: 無限" : "モード: 無限")) : (
                         <>
                             {language === 'en' ? "Time Left: " : (language === 'zh' ? "剩餘時間: " : "残り時間: ")}
@@ -153,7 +153,7 @@ export default function BreathingApp({ userId, language, setLanguage }) {
             </div>
 
             {/* Control Panel (Right/Bottom) */}
-            <div className="h-[45dvh] md:h-full md:w-[400px] shrink-0 bg-panel-bg flex flex-col border-t border-[#333] overflow-hidden">
+            <div className="h-[45dvh] md:h-full md:w-[450px] lg:w-[500px] shrink-0 bg-panel-bg flex flex-col border-t border-[#333] overflow-hidden">
                 <ControlPanel
                     onStart={engine.start}
                     onStop={handleManualStop}
