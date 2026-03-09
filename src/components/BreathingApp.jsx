@@ -32,10 +32,6 @@ export default function BreathingApp({ userId, language, setLanguage }) {
         const stats = {
             totalSessions: 0,
             totalTimeSeconds: 0,
-            lastSession: null,
-            byMode: {},
-            totalSessions: 0,
-            totalTimeSeconds: 0,
             todayTimeSeconds: 0,
             lastSession: null,
             byMode: {},
