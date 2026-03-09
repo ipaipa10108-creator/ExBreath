@@ -161,7 +161,7 @@ export default function HistoryModal({ isOpen, onClose, history, language }) {
                                             communityHistory.map((r, idx) => (
                                                 <div key={idx} className="bg-[#1a1a1a] p-3 rounded border border-[#222] flex flex-col gap-1">
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-primary-gold font-mono text-xs">User: {r.id}</span>
+                                                        <span className="text-primary-gold font-mono text-xs">User: {r.userId || r.id}</span>
                                                         <span className="text-gray-600 text-[10px]">{parseDate(r.timestamp)}</span>
                                                     </div>
                                                     <div className="flex justify-between items-center text-sm">

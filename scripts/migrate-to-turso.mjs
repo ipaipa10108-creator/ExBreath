@@ -51,7 +51,9 @@ async function runMigration() {
             return;
         }
 
-        console.log("3. Migrating items to Turso Database via Transaction...");
+        console.log("3. Clearing previous dirty records and Migrating items via Transaction...");
+        await tursoClient.execute("DELETE FROM exbreath_records");
+
         const start = Date.now();
 
         // Use batch to optimize inserts
@@ -59,7 +61,7 @@ async function runMigration() {
             sql: "INSERT INTO exbreath_records (id, userId, level, duration, actualSeconds, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
             args: [
                 nanoid(),
-                record.userId || 'anonymous',
+                record.id || record.userId || 'anonymous',
                 record.level || 'Unknown',
                 String(record.duration || ''),
                 record.actualSeconds || 0,

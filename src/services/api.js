@@ -87,7 +87,7 @@ export const uploadRecord = async (data) => {
         const id = nanoid();
         await tursoClient.execute({
             sql: "INSERT INTO exbreath_records (id, userId, level, duration, actualSeconds, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
-            args: [id, payload.userId || 'anonymous', payload.level, String(payload.duration), payload.actualSeconds || 0, payload.timestamp]
+            args: [id, payload.id || payload.userId || 'anonymous', payload.level, String(payload.duration), payload.actualSeconds || 0, payload.timestamp]
         });
         console.log("Record uploaded to Turso", payload);
     } catch (err) {
