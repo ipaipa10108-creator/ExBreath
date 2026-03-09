@@ -1,4 +1,7 @@
-const GAS_URL = import.meta.env.VITE_GOOGLE_APP_SCRIPT_URL;
+import { tursoClient, initTursoDb } from './turso';
+
+// Initialize DB immediately
+initTursoDb();
 
 // Local Storage Key
 const STORAGE_KEY = 'exbreath_history';
@@ -41,15 +44,13 @@ const saveLocalHistory = (data) => {
 };
 
 export const fetchRemoteHistory = async (userId) => {
-    if (!GAS_URL) return null;
+    if (!tursoClient) return null;
     try {
-        // Appending query param for GAS doGet
-        const response = await fetch(`${GAS_URL}?id=${encodeURIComponent(userId)}`, {
-            method: 'GET',
+        const result = await tursoClient.execute({
+            sql: "SELECT * FROM records WHERE id = ? ORDER BY timestamp DESC",
+            args: [userId]
         });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        return data; // Expected format: { records: [], stats: {} }
+        return result.rows || [];
     } catch (err) {
         console.error("Fetch remote history failed", err);
         return null; // Fallback to local
@@ -59,46 +60,38 @@ export const fetchRemoteHistory = async (userId) => {
 export const uploadRecord = async (data) => {
     const payload = {
         ...data,
-        // Generate Local ISO String (YYYY-MM-DDTHH:mm:ss.sss)
         timestamp: new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, -1)
     };
 
     // 1. Save Local
     saveLocalHistory(payload);
 
-    // 2. Upload to Cloud
-    if (!GAS_URL) {
-        return;
-    }
+    // 2. Upload to Turso
+    if (!tursoClient) return;
 
     try {
-        // Use text/plain to avoid preflight options request which GAS hates sometimes, 
-        // OR standard JSON if properly configured. 
-        // For simplicity with GAS `doPost(e)`, JSON.stringify(payload) is standard.
-        // We use no-cors to prevent errors if GAS doesn't return CORS headers, 
-        // BUT we lose error handling. Ideally user updates GAS to handle CORS.
-        await fetch(GAS_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Keep no-cors for write to ensure it sends even if CORS fails
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+        await tursoClient.execute({
+            sql: "INSERT INTO records (id, level, duration, actualSeconds, completed, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+            args: [
+                payload.id,
+                payload.level,
+                payload.duration.toString(),
+                payload.actualSeconds,
+                payload.completed ? 1 : 0,
+                payload.timestamp
+            ]
         });
-        console.log("Record uploaded", payload);
+        console.log("Record uploaded to Turso", payload);
     } catch (err) {
-        console.error("Upload failed", err);
+        console.error("Upload to Turso failed", err);
     }
 };
 
 export const fetchGlobalHistory = async () => {
-    if (!GAS_URL) return [];
+    if (!tursoClient) return [];
     try {
-        const response = await fetch(`${GAS_URL}?type=global&t=${Date.now()}`, {
-            method: 'GET',
-        });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        // The backend should return an array of records
-        return Array.isArray(data) ? data : (data.records || []);
+        const result = await tursoClient.execute("SELECT * FROM records ORDER BY timestamp DESC LIMIT 100");
+        return result.rows || [];
     } catch (err) {
         console.error("Fetch global history failed", err);
         return [];
