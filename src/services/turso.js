@@ -8,7 +8,7 @@ const VITE_TURSO_AUTH_TOKEN = import.meta.env.VITE_TURSO_AUTH_TOKEN || "";
  */
 export const tursoClient = (VITE_TURSO_DATABASE_URL && VITE_TURSO_AUTH_TOKEN)
     ? createClient({
-        url: VITE_TURSO_DATABASE_URL,
+        url: VITE_TURSO_DATABASE_URL.replace("libsql://", "https://"),
         authToken: VITE_TURSO_AUTH_TOKEN,
     })
     : null;
