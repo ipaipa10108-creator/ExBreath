@@ -33,9 +33,12 @@ const VisualArea = forwardRef(({ mode, language = 'en' }, ref) => {
                     </mask>
 
                     <g id="complexLungShape">
-                        <path d="M 46,30 C 44,28 40,28 38,32 C 30,45 25,60 25,75 C 25,85 35,90 42,88 C 46,87 46,75 46,75 Z" />
-                        <path d="M 54,30 C 56,28 60,28 62,32 C 70,45 75,60 75,75 C 75,85 65,90 58,88 C 54,87 54,75 54,75 Z" />
-                        <path d="M 48,32 L 48,15 L 52,15 L 52,32" />
+                        {/* Trachea */}
+                        <path d="M46.5,10 L53.5,10 C53.5,20 53.5,24 55,28 C57,32 61,35.5 63,37 L60.5,40 C58,38 53.5,34 51,30 C48.5,34 44,38 41.5,40 L39,37 C41,35.5 45,32 47,28 C48.5,24 48.5,20 46.5,10 Z" />
+                        {/* Viewer's Left Lung */}
+                        <path d="M42,25 C36,22 28,24 23,32 C18,41 15,55 17,70 C19,85 26,92 35,90 C42,88 45,82 46.5,74 C48,64 49,48 46,35 C45.5,31 44,28 42,25 Z" />
+                        {/* Viewer's Right Lung */}
+                        <path d="M58,25 C64,22 72,24 77,32 C82,41 85,55 83,70 C81,85 74,92 65,90 C58,88 55,82 53.5,74 C52,64 51,48 54,35 C54.5,31 56,28 58,25 Z" />
                     </g>
 
                     <mask id="lungMask">
@@ -43,9 +46,22 @@ const VisualArea = forwardRef(({ mode, language = 'en' }, ref) => {
                         <use href="#complexLungShape" fill="white" />
                     </mask>
 
+                    <g id="lungDetails">
+                        {/* Tracheal Rings */}
+                        <path d="M46.5,12 L53.5,12 M46.5,15 L53.5,15 M46.5,18 L53.5,18 M46.5,21 L53.5,21 M47,24 L53,24 M48,27 L52,27" className="fill-none stroke-black stroke-[0.6] opacity-40" />
+                        {/* Lobe Fissures */}
+                        <path d="M17,55 Q28,50 48,58" className="fill-none stroke-black stroke-[0.4] opacity-30" />
+                        <path d="M21,38 Q30,55 46.5,65" className="fill-none stroke-black stroke-[0.4] opacity-30" />
+                        <path d="M79,38 Q70,55 53.5,65" className="fill-none stroke-black stroke-[0.4] opacity-30" />
+                    </g>
+
                     <g id="bronchiTree">
-                        <path d="M 50,32 Q 46,45 35,60 M 35,60 Q 30,70 28,75 M 35,60 Q 40,70 42,75" className="fill-none stroke-black stroke-[0.5] opacity-30" />
-                        <path d="M 50,32 Q 54,45 65,60 M 65,60 Q 70,70 72,75 M 65,60 Q 60,70 58,75" className="fill-none stroke-black stroke-[0.5] opacity-30" />
+                        {/* Left tree */}
+                        <path d="M45,31 Q38,39 30,47 Q25,53 22,60 M30,47 Q35,53 33,63 M36,40 Q28,49 26,56 M42,35 Q35,43 36,49 M31,46 Q25,48 20,53" className="fill-none stroke-black stroke-[0.5] opacity-40" />
+                        <path d="M22,60 Q20,66 19,72 M22,60 Q25,65 26,71 M33,63 Q31,70 29,76 M33,63 Q36,68 38,74 M26,56 Q24,62 23,68" className="fill-none stroke-black stroke-[0.3] opacity-30" />
+                        {/* Right tree */}
+                        <path d="M55,31 Q62,39 70,47 Q75,53 78,60 M70,47 Q65,53 67,63 M64,40 Q72,49 74,56 M58,35 Q65,43 64,49 M69,46 Q75,48 80,53" className="fill-none stroke-black stroke-[0.5] opacity-40" />
+                        <path d="M78,60 Q80,66 81,72 M78,60 Q75,65 74,71 M67,63 Q69,70 71,76 M67,63 Q64,68 62,74 M74,56 Q76,62 77,68" className="fill-none stroke-black stroke-[0.3] opacity-30" />
                     </g>
                 </defs>
 
@@ -61,6 +77,7 @@ const VisualArea = forwardRef(({ mode, language = 'en' }, ref) => {
                         <rect x="0" y="0" width="100" height="100" fill="url(#goldLinearGradient)" mask="url(#liquidMask)" />
                     </g>
 
+                    <use href="#lungDetails" />
                     <use href="#bronchiTree" />
 
                     <use
